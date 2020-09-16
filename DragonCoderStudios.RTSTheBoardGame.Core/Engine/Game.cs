@@ -20,9 +20,22 @@ namespace DragonCoderStudios.RTSTheBoardGame.Core.Engine
     {
         public List<Player> Players { get; }
 
+        private TurnState _currentTurn;
+        public TurnState CurrentTurn { 
+            get
+            {
+                if(_currentTurn == null)
+                {
+                    _currentTurn = new TurnState(this);
+                }
+
+                return _currentTurn;
+            }
+        }
+        
         public Game(List<string> Playernames)
         {
-            Players = Playernames.Select(p => new Player(p));
+            Players = Playernames.Select(p => new Player(p)).ToList();
         }
     }
 }

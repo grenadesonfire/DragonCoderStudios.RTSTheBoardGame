@@ -10,6 +10,8 @@ namespace DragonCoderStudios.RTSTheBoardGame.Core.Engine
 
         public int VictoryPoints { get; set; }
 
+        public int InitiativeOrder { get; set; }
+
         public Player(string name)
         {
             Name = name;

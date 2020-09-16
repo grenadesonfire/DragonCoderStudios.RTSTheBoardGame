@@ -11,31 +11,31 @@ namespace DragonCoderStudios.RTSTheBoardGame.Core.Tests.TacticalPhase
         [Fact]
         public void InvasionOrbitalBombardment()
         {
-
+            Assert.True(false, "Not finished");
         }
 
         [Fact]
         public void InvasionPlanetaryAssault()
         {
-
+            Assert.True(false, "Not finished");
         }
 
         [Fact]
         public void InvasionMassDriverDefence()
         {
-
+            Assert.True(false, "Not finished");
         }
 
         [Fact]
         public void InvasionPlanetaryCombat()
         {
-
+            Assert.True(false, "Not finished");
         }
 
         [Fact]
         public void DetermineControl()
         {
-
+            Assert.True(false, "Not finished");
         }
     }
 }

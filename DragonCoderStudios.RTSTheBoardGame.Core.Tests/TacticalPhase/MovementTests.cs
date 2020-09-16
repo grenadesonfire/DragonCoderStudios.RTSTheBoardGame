@@ -10,13 +10,13 @@ namespace DragonCoderStudios.RTSTheBoardGame.Core.Tests.TacticalPhase
         [Fact]
         public void MoveFleet()
         {
-
+            Assert.True(false, "Not finished");
         }
 
         [Fact]
         public void MassDriverOffense()
         {
-
+            Assert.True(false, "Not finished");
         }
     }
 }

@@ -11,31 +11,31 @@ namespace DragonCoderStudios.RTSTheBoardGame.Core.Tests.TacticalPhase
         [Fact]
         public void CombatPointDefence()
         {
-
+            Assert.True(false, "Not finished");
         }
 
         [Fact]
         public void CombatAnnounceRetreat()
         {
-
+            Assert.True(false, "Not finished");
         }
 
         [Fact]
         public void CombatExchangeFire()
         {
-
+            Assert.True(false, "Not finished");
         }
 
         [Fact]
         public void CombatAssignDamage()
         {
-
+            Assert.True(false, "Not finished");
         }
 
         [Fact]
         public void CombatRetreat()
         {
-
+            Assert.True(false, "Not finished");
         }
     }
 }

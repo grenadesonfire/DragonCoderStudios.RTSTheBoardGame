@@ -10,7 +10,7 @@ namespace DragonCoderStudios.RTSTheBoardGame.Core.Tests.TacticalPhase
         [Fact]
         public void ProduceUnits()
         {
-
+            Assert.True(false, "Not finished");
         }
     }
 }

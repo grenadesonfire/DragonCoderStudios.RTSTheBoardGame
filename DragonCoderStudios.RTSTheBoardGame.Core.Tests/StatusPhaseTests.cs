@@ -13,11 +13,13 @@ namespace DragonCoderStudios.RTSTheBoardGame.Core.Tests
         {
             var g = new Game(new List<string> { "Player 1", "Player2" });
 
-            g.Players[0].TotalPoints = 10;
+            g.Players[0].VictoryPoints = 10;
 
-            g.AdvanceToPhase(Phase.Status);
+            g.CurrentTurn.AdvanceToPhase(Phase.Status);
 
-            Assert.True(g.GameOver, "Game was not ended correctly.");
+            Assert.True(g.CurrentTurn.GameOver, "Game was not ended correctly.");
+
+            Assert.True(g.CurrentTurn.Victors.Contains(g.Players[0]), "First player should be the victor.");
         }
 
         [Fact]
