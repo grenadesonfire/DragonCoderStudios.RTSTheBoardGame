@@ -36,6 +36,8 @@ namespace DragonCoderStudios.RTSTheBoardGame.Core.Engine
         public Game(List<string> Playernames)
         {
             Players = Playernames.Select(p => new Player(p)).ToList();
+
+            Players.FirstOrDefault().IsSpeaker = true;
         }
     }
 }

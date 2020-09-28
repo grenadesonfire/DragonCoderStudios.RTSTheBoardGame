@@ -10,13 +10,13 @@ namespace DragonCoderStudios.RTSTheBoardGame.Core.Tests
         [Fact]
         public void ChooseACard()
         {
-
+            Assert.True(false);
         }
 
         [Fact]
         public void PhaseChangeAfterChoicesMade()
         {
-
+            Assert.True(false);
         }
     }
 }

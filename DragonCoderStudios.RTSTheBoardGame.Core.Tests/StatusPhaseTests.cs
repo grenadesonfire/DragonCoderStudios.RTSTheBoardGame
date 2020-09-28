@@ -25,49 +25,49 @@ namespace DragonCoderStudios.RTSTheBoardGame.Core.Tests
         [Fact]
         public void NewObjectiveCardRevealed()
         {
-
+            Assert.True(false);
         }
 
         [Fact]
         public void Draw2ObjectiveCards()
         {
-
+            Assert.True(false);
         }
 
         [Fact]
         public void RemoveUnusedCommandPoints()
         {
-
+            Assert.True(false);
         }
 
         [Fact]
         public void PlayersRegainCommandPoints()
         {
-
+            Assert.True(false);
         }
 
         [Fact]
         public void PlayersRedistributeCommandPoints()
         {
-
+            Assert.True(false);
         }
 
         [Fact]
         public void PlayersReadyCards()
         {
-
+            Assert.True(false);
         }
 
         [Fact]
         public void PlayersRepairDamagedUnits()
         {
-
+            Assert.True(false);
         }
 
         [Fact]
         public void PlayersReturnStrategyCards()
         {
-
+            Assert.True(false);
         }
     }
 }
