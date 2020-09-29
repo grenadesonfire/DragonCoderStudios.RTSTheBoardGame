@@ -34,7 +34,7 @@ namespace DragonCoderStudios.RTSTheBoardGame.Core.Engine
 
         public bool IsSpeaker { get; set; }
 
-        public FactionDescription Faction { get; set; }
+        public Faction Faction { get; set; }
 
         public List<CommandToken> CommandTokens { get; set; }
         public List<ControlToken> ControlTokens { get; set; }
@@ -45,6 +45,14 @@ namespace DragonCoderStudios.RTSTheBoardGame.Core.Engine
         {
             Name = name;
             VictoryPoints = 0;
+        }
+
+        public void InitializeTokens(int controlTokens, int commandTokens)
+        {
+            ControlTokens = new List<ControlToken>();
+            for (var idx = 0; idx < controlTokens; idx++) ControlTokens.Add(new ControlToken(this));
+            CommandTokens = new List<CommandToken>();
+            for (var idx = 0; idx < commandTokens; idx++) CommandTokens.Add(new CommandToken(this));
         }
     }
 }

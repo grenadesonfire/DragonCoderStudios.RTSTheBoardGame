@@ -1,4 +1,5 @@
 ﻿using DragonCoderStudios.RTSTheBoardGame.Core.Engine;
+using DragonCoderStudios.RTSTheBoardGame.Core.Faction;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -11,7 +12,7 @@ namespace DragonCoderStudios.RTSTheBoardGame.Core.Tests
         [Fact]
         public void ScoreObjectivesInInitiativeOrder()
         {
-            var g = new Game(new List<string> { "Player 1", "Player2" });
+            var g = new Game(new List<string> { "Player 1", "Player2" }, new List<FactionDescription> { FactionDescription.XXChaKingdome(), FactionDescription.XXChaKingdome() });
 
             g.Players[0].VictoryPoints = 10;
 

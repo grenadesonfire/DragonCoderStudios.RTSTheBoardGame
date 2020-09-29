@@ -5,8 +5,13 @@ using System.Text;
 
 namespace DragonCoderStudios.RTSTheBoardGame.Core.Tokens
 {
-    public class ControlToken : BaseToken
+    public class BaseToken
     {
-        public ControlToken(Player p) : base(p) { }
+        public Player Owner { get; }
+
+        public BaseToken(Player p)
+        {
+            Owner = p;
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using DragonCoderStudios.RTSTheBoardGame.Core.Cards;
+using DragonCoderStudios.RTSTheBoardGame.Core.Engine;
 using DragonCoderStudios.RTSTheBoardGame.Core.Map;
 using DragonCoderStudios.RTSTheBoardGame.Core.Tokens;
 using System;
@@ -41,8 +42,8 @@ namespace DragonCoderStudios.RTSTheBoardGame.Core.Faction
     {
         public string Name { get; private set; }
         public int StartingCommodities { get; private set; }
-        //    public FlagShipDescription FlagShip { get; private set; }
-        //    public CruiserDescription Cruiser { get; private set; }
+        public FlagShipDescription FlagShip { get; private set; }
+        public CruiserDescription Cruiser { get; private set; }
         //    public DreadnoughtDescription Dreadnought { get; private set; }
         //    public DestroyerDescription Destroyer { get; private set; }
         //    public WarSunDescription Warsun { get; private set; }
@@ -54,23 +55,34 @@ namespace DragonCoderStudios.RTSTheBoardGame.Core.Faction
         public MapTile HomeTile { get; set; }
         public List<FactionTechnologyCard> TechnologyCards { get; set; }
         public PromissaryNote PromissaryNote { get; set; }
-        //    private FactionDescription() { }
+        private FactionDescription() { }
 
-        //    public static FactionDescription XXChaKingdome()
-        //    {
-        //        return new FactionDescription
-        //        {
-        //            Name = "The XXCHA Kingdom",
-        //            StartingCommodities = 4,
-        //            FlagShip = FlagShipDescription.LonCara(),
-        //            Cruiser = new CruiserDescription
-        //            {
-        //                Capacity = 0,
-        //                Cost = 2,
-        //                Combat = 7,
-        //                Move = 2
-        //            }
-        //        }
-        //    }
+        public static FactionDescription XXChaKingdome()
+        {
+            return new FactionDescription
+            {
+                Name = "The XXCHA Kingdom",
+                StartingCommodities = 4,
+                FlagShip = FlagShipDescription.LonCara(),
+                Cruiser = new CruiserDescription
+                {
+                    Capacity = 0,
+                    Cost = 2,
+                    Combat = 7,
+                    Move = 2
+                },
+                HomeTile = new MapTile
+                {
+                    Type = TileType.Planet,
+                    FirstPlanet = PlanetDescription.ArchonRen(),
+                    SecondPlanet = PlanetDescription.ArchonTau()
+                },
+                TechnologyCards = new List<FactionTechnologyCard>
+                {
+                    FactionTechnologyCard.NullificationField(),
+                    FactionTechnologyCard.InstinctTraining()
+                }
+            };
+        }
     }
 }
