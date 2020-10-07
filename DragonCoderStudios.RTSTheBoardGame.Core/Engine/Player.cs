@@ -22,6 +22,13 @@ namespace DragonCoderStudios.RTSTheBoardGame.Core.Engine
         public PlayerColor PlayerColor { get; set; }
         public List<ColorTechnologyCard> TechnologyCards { get; set; }
         public List<PromissaryNote> PromissaryNotes { get; set; }
+
+        public ColorFaction(PlayerColor color)
+        {
+            PlayerColor = color;
+            TechnologyCards = new List<ColorTechnologyCard>();
+            PromissaryNotes = new List<PromissaryNote>();
+        }
     }
 
     public class Player
@@ -53,6 +60,11 @@ namespace DragonCoderStudios.RTSTheBoardGame.Core.Engine
             for (var idx = 0; idx < controlTokens; idx++) ControlTokens.Add(new ControlToken(this));
             CommandTokens = new List<CommandToken>();
             for (var idx = 0; idx < commandTokens; idx++) CommandTokens.Add(new CommandToken(this));
+        }
+
+        public void AssignColor(PlayerColor color)
+        {
+            Color = new ColorFaction(color);
         }
     }
 }

@@ -63,5 +63,15 @@ namespace DragonCoderStudios.RTSTheBoardGame.Core.Engine
 
             Players.FirstOrDefault().IsSpeaker = true;
         }
+
+        public void AssingColorChoices(List<PlayerColor> colors)
+        {
+            if (colors.Count() != Players.Count()) throw new Exception("Not enough colors chosen");
+
+            for(var pIdx = 0; pIdx < Players.Count(); pIdx++)
+            {
+                Players[pIdx].AssignColor(colors[pIdx]);
+            }
+        }
     }
 }

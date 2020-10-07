@@ -24,6 +24,13 @@ namespace DragonCoderStudios.RTSTheBoardGame.Tests.Setup
                 FactionDescription.XXChaKingdome(),
                 FactionDescription.XXChaKingdome(),
             };
+
+        public readonly List<PlayerColor> PLAYER_COLORS =
+            new List<PlayerColor>
+            {
+                PlayerColor.BLUE,
+                PlayerColor.RED
+            };
     }
 
     public class Stage01 : BaseSetupTests
@@ -77,6 +84,8 @@ namespace DragonCoderStudios.RTSTheBoardGame.Tests.Setup
         public void ColorsAssigned()
         {
             var g = new Game(PLAYER_NAMES, PLAYER_FACTIONS);
+
+            g.AssingColorChoices(PLAYER_COLORS);
 
             Assert.True(g.Players.Where(p => p.Color == null).Count() == 0, "Every player should have something assigned.");
 
