@@ -89,14 +89,14 @@ namespace DragonCoderStudios.RTSTheBoardGame.Tests.Setup
 
             Assert.True(g.Players.Where(p => p.Color == null).Count() == 0, "Every player should have something assigned.");
 
+            var playerTechCardCount = g.Players.Where(p => p.Color.TechnologyCards.Count() != 25);
             Assert.True(
-                g.Players.Where(p => p.Color.TechnologyCards.Count() != 25).Count() == 0,
-                "Should have 25 cards available.");
+                playerTechCardCount.Count() == 0,
+                $"Should have 25 cards available. Found {g.Players.FirstOrDefault(p => p.Color.TechnologyCards.Count() != 25)?.Color.TechnologyCards.Count()}");
 
             Assert.True(
                 g.Players.Where(p => p.Color.PromissaryNotes.Count() != 4).Count() == 0,
                 "Should have 4 promissary notes for the color.");
-
             //Assert that player has 5 notes after shuffle on play area
             //Assert that player has 27 tech cards after shuffling tech and color together.
         }

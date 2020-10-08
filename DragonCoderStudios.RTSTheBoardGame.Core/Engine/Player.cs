@@ -65,6 +65,39 @@ namespace DragonCoderStudios.RTSTheBoardGame.Core.Engine
         public void AssignColor(PlayerColor color)
         {
             Color = new ColorFaction(color);
+
+            Color.TechnologyCards.Add(ColorTechnologyCard.CarrierII());
+            Color.TechnologyCards.Add(ColorTechnologyCard.CruiserII());
+            Color.TechnologyCards.Add(ColorTechnologyCard.DestroyerII());
+            Color.TechnologyCards.Add(ColorTechnologyCard.DreadnoughtII());
+            Color.TechnologyCards.Add(ColorTechnologyCard.FighterII());
+            Color.TechnologyCards.Add(ColorTechnologyCard.InfantryII());
+            Color.TechnologyCards.Add(ColorTechnologyCard.PDSII());
+            Color.TechnologyCards.Add(ColorTechnologyCard.SpaceDockII());
+            Color.TechnologyCards.Add(ColorTechnologyCard.WarSun());
+
+            Color.TechnologyCards.Add(ColorTechnologyCard.AntimassDeflectors());
+            Color.TechnologyCards.Add(ColorTechnologyCard.AssaultCannon());
+            Color.TechnologyCards.Add(ColorTechnologyCard.DacxiveAnimators());
+            Color.TechnologyCards.Add(ColorTechnologyCard.DuraniumArmor());
+            Color.TechnologyCards.Add(ColorTechnologyCard.FleetLogistics());
+            Color.TechnologyCards.Add(ColorTechnologyCard.GravitationLaserSystem());
+            Color.TechnologyCards.Add(ColorTechnologyCard.GravityDrive());
+            Color.TechnologyCards.Add(ColorTechnologyCard.HyperMetabolism());
+            Color.TechnologyCards.Add(ColorTechnologyCard.IntegratedEconomy());
+            Color.TechnologyCards.Add(ColorTechnologyCard.LightWaveDeflector());
+            Color.TechnologyCards.Add(ColorTechnologyCard.MagenDefenseGrid());
+            Color.TechnologyCards.Add(ColorTechnologyCard.NeuralMotivator());
+            Color.TechnologyCards.Add(ColorTechnologyCard.PlasmaScoring());
+            Color.TechnologyCards.Add(ColorTechnologyCard.SarweenTools());
+            Color.TechnologyCards.Add(ColorTechnologyCard.TransitDiodes());
+            Color.TechnologyCards.Add(ColorTechnologyCard.X89BacterialWeapon());
+
+            // promissary Notes
+            Color.PromissaryNotes.Add(PromissaryNote.PoliticalSecret());
+            Color.PromissaryNotes.Add(PromissaryNote.TradeAgreement());
+            Color.PromissaryNotes.Add(PromissaryNote.SupportForTheThrone());
+            Color.PromissaryNotes.Add(PromissaryNote.CeaseFire());
         }
     }
 }
