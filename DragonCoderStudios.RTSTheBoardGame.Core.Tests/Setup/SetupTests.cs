@@ -108,7 +108,14 @@ namespace DragonCoderStudios.RTSTheBoardGame.Tests.Setup
         [Fact]
         public void PlayAreaHasPlanetCardSetup()
         {
-            Assert.True(false);
+            var g = new Game(PLAYER_NAMES, PLAYER_FACTIONS);
+
+            g.AssingColorChoices(PLAYER_COLORS);
+
+            foreach(var p in g.Players)
+            {
+                Assert.True(p.Faction.Description.HomeTile.FirstPlanet != null, "Should have a planet assigned");
+            }
         }
     }
 

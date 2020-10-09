@@ -1,4 +1,5 @@
 ﻿using DragonCoderStudios.RTSTheBoardGame.Core.Faction;
+using DragonCoderStudios.RTSTheBoardGame.Core.Map;
 using DragonCoderStudios.RTSTheBoardGame.Core.Tokens;
 using System;
 using System.Collections.Generic;
@@ -22,8 +23,6 @@ namespace DragonCoderStudios.RTSTheBoardGame.Core.Engine
     {
         public FactionDescription Description { get; set; }
         public PromissaryNote PromissaryNote { get; set; }
-
-
 
         public void Initialize(Player p)
         {

@@ -55,6 +55,7 @@ namespace DragonCoderStudios.RTSTheBoardGame.Core.Faction
         public MapTile HomeTile { get; set; }
         public List<FactionTechnologyCard> TechnologyCards { get; set; }
         public PromissaryNote PromissaryNote { get; set; }
+
         private FactionDescription() { }
 
         public static FactionDescription XXChaKingdome()
