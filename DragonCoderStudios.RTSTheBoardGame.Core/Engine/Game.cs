@@ -34,6 +34,8 @@ namespace DragonCoderStudios.RTSTheBoardGame.Core.Engine
     {
         public List<Player> Players { get; }
 
+        public MapLayout Map { get; }
+
         private TurnState _currentTurn;
         public TurnState CurrentTurn { 
             get
@@ -61,6 +63,8 @@ namespace DragonCoderStudios.RTSTheBoardGame.Core.Engine
             }
 
             Players.FirstOrDefault().IsSpeaker = true;
+
+            Map = new MapLayout();
         }
 
         public void AssingColorChoices(List<PlayerColor> colors)
@@ -71,6 +75,11 @@ namespace DragonCoderStudios.RTSTheBoardGame.Core.Engine
             {
                 Players[pIdx].AssignColor(colors[pIdx]);
             }
+        }
+
+        public void BeginMapSetup()
+        {
+            Map.BeginSetup(Players);
         }
     }
 }

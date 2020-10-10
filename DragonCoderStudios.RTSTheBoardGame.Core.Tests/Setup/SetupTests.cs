@@ -1,6 +1,7 @@
 using DragonCoderStudios.RTSTheBoardGame.Core.Cards;
 using DragonCoderStudios.RTSTheBoardGame.Core.Engine;
 using DragonCoderStudios.RTSTheBoardGame.Core.Faction;
+using DragonCoderStudios.RTSTheBoardGame.Core.Map;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,11 @@ namespace DragonCoderStudios.RTSTheBoardGame.Tests.Setup
         public readonly List<string> PLAYER_NAMES =
             new List<string>{
                 "Player 1",
-                "Player 2"
+                "Player 2",
+                "Player 3",
+                "Player 4",
+                "Player 5",
+                "Player 6",
             };
 
         public readonly List<FactionDescription> PLAYER_FACTIONS =
@@ -23,14 +28,38 @@ namespace DragonCoderStudios.RTSTheBoardGame.Tests.Setup
             {
                 FactionDescription.XXChaKingdome(),
                 FactionDescription.XXChaKingdome(),
+                FactionDescription.XXChaKingdome(),
+                FactionDescription.XXChaKingdome(),
+                FactionDescription.XXChaKingdome(),
+                FactionDescription.XXChaKingdome()
             };
 
         public readonly List<PlayerColor> PLAYER_COLORS =
             new List<PlayerColor>
             {
                 PlayerColor.BLUE,
-                PlayerColor.RED
+                PlayerColor.RED,
+                PlayerColor.GREEN,
+                PlayerColor.BLACK,
+                PlayerColor.YELLOW,
+                PlayerColor.WHITE
             };
+
+        public Game Setup(int players)
+        {
+            return new Game(
+                PLAYER_NAMES.Take(players).ToList(),
+                PLAYER_FACTIONS.Take(players).ToList());
+        }
+
+        public Game SetupWithColorsAssigned(int players)
+        {
+            var g = Setup(players);
+
+            g.AssingColorChoices(PLAYER_COLORS.Take(players).ToList());
+
+            return g;
+        }
     }
 
     public class Stage01 : BaseSetupTests
@@ -125,25 +154,65 @@ namespace DragonCoderStudios.RTSTheBoardGame.Tests.Setup
         [Fact]
         public void ThreePlayerAmountsCorrect()
         {
-            Assert.True(false);
+            var g = SetupWithColorsAssigned(3);
+
+            g.BeginMapSetup();
+
+            var tiles = g.Map.Tiles.Where(t => !t.Placed).ToList();
+
+            Assert.True(
+                g.Map.Tiles.Count() == 24, 
+                $"Total is incorrect, found {g.Map.Tiles.Count()}");
+
+            AssertForPlayers(tiles.ToList(), g.Players, 8, 6, 2);
         }
 
         [Fact]
         public void FourPlayerAmountsCorrect()
         {
-            Assert.True(false);
+            var g = SetupWithColorsAssigned(4);
+
+            g.BeginMapSetup();
+
+            var tiles = g.Map.Tiles.Where(t => !t.Placed).ToList();
+
+            Assert.True(
+                g.Map.Tiles.Count() == 32,
+                $"Total is incorrect, found {g.Map.Tiles.Count()}");
+
+            AssertForPlayers(tiles.ToList(), g.Players, 8, 5, 3);
         }
 
         [Fact]
-        public void FiveePlayerAmountsCorrect()
+        public void FivePlayerAmountsCorrect()
         {
-            Assert.True(false);
+            var g = SetupWithColorsAssigned(5);
+
+            g.BeginMapSetup();
+
+            var tiles = g.Map.Tiles.Where(t => !t.Placed).ToList();
+
+            Assert.True(
+                g.Map.Tiles.Count() == 30,
+                $"Total is incorrect, found {g.Map.Tiles.Count()}");
+
+            AssertForPlayers(tiles.ToList(), g.Players, 6, 4, 2);
         }
 
         [Fact]
         public void SixPlayerAmountsCorrect()
         {
-            Assert.True(false);
+            var g = SetupWithColorsAssigned(6);
+
+            g.BeginMapSetup();
+
+            var tiles = g.Map.Tiles.Where(t => !t.Placed).ToList();
+
+            Assert.True(
+                g.Map.Tiles.Count() == 30,
+                $"Total is incorrect, found {g.Map.Tiles.Count()}");
+
+            AssertForPlayers(tiles.ToList(), g.Players, 5, 3, 2);
         }
 
         [Fact]
@@ -174,6 +243,30 @@ namespace DragonCoderStudios.RTSTheBoardGame.Tests.Setup
         public void FivePlayerGameBonusesApplied()
         {
             Assert.True(false);
+        }
+
+        private void AssertForPlayers(List<MapTile> tiles, List<Player> players, int playerTotal, int playerBlue, int playerRed)
+        {
+            for (var pIdx = 0; pIdx < players.Count(); pIdx++)
+            {
+                Assert.True(
+                    tiles
+                        .Where(t => t.PlacedBy == players[pIdx])
+                        .Count() == playerTotal,
+                    $"Player {pIdx + 1} not dealt {playerTotal} tiles.");
+
+                var blueCount = tiles
+                        .Where(t => t.PlacedBy == players[pIdx] && t.Category == Core.Map.PlanetCategory.BLUE)
+                        .Count();
+                Assert.True(
+                    blueCount == playerBlue,
+                    $"Player {pIdx + 1} not dealt {playerBlue} blue tiles. Found {blueCount}.");
+
+                Assert.True(
+                    tiles
+                        .Where(t => t.PlacedBy == players[pIdx] && t.Category == PlanetCategory.RED)
+                        .Count() == playerRed, $"Player {0 + 1} not dealt {playerRed} red tiles.");
+            }
         }
     }
 
