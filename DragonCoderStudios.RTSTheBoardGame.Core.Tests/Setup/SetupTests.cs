@@ -158,13 +158,15 @@ namespace DragonCoderStudios.RTSTheBoardGame.Tests.Setup
 
             g.BeginMapSetup();
 
+            g.AssignHomeLocations();
+
             var tiles = g.Map.Tiles.Where(t => !t.Placed).ToList();
 
             Assert.True(
-                g.Map.Tiles.Count() == 24, 
+                g.Map.Tiles.Count() == 1 + 6 + 12 + 9, 
                 $"Total is incorrect, found {g.Map.Tiles.Count()}");
 
-            AssertForPlayers(tiles.ToList(), g.Players, 8, 6, 2);
+            AssertTileCountsForPlayers(tiles.ToList(), g.Players, 8, 6, 2);
         }
 
         [Fact]
@@ -174,13 +176,15 @@ namespace DragonCoderStudios.RTSTheBoardGame.Tests.Setup
 
             g.BeginMapSetup();
 
+            g.AssignHomeLocations();
+
             var tiles = g.Map.Tiles.Where(t => !t.Placed).ToList();
 
             Assert.True(
-                g.Map.Tiles.Count() == 32,
+                g.Map.Tiles.Count() == 1 + 6 + 12 + 18,
                 $"Total is incorrect, found {g.Map.Tiles.Count()}");
 
-            AssertForPlayers(tiles.ToList(), g.Players, 8, 5, 3);
+            AssertTileCountsForPlayers(tiles.ToList(), g.Players, 8, 5, 3);
         }
 
         [Fact]
@@ -188,15 +192,18 @@ namespace DragonCoderStudios.RTSTheBoardGame.Tests.Setup
         {
             var g = SetupWithColorsAssigned(5);
 
+            // Account for 1 extra speaker tile
             g.BeginMapSetup();
+
+            g.AssignHomeLocations();
 
             var tiles = g.Map.Tiles.Where(t => !t.Placed).ToList();
 
             Assert.True(
-                g.Map.Tiles.Count() == 30,
+                g.Map.Tiles.Count() == 1 + 6 + 12 + 18 - 1,
                 $"Total is incorrect, found {g.Map.Tiles.Count()}");
 
-            AssertForPlayers(tiles.ToList(), g.Players, 6, 4, 2);
+            AssertTileCountsForPlayers(tiles.ToList(), g.Players, 6, 4, 2);
         }
 
         [Fact]
@@ -206,13 +213,15 @@ namespace DragonCoderStudios.RTSTheBoardGame.Tests.Setup
 
             g.BeginMapSetup();
 
+            g.AssignHomeLocations();
+
             var tiles = g.Map.Tiles.Where(t => !t.Placed).ToList();
 
             Assert.True(
-                g.Map.Tiles.Count() == 30,
+                g.Map.Tiles.Count() == 1 + 6 + 12 + 18,
                 $"Total is incorrect, found {g.Map.Tiles.Count()}");
 
-            AssertForPlayers(tiles.ToList(), g.Players, 5, 3, 2);
+            AssertTileCountsForPlayers(tiles.ToList(), g.Players, 5, 3, 2);
         }
 
         [Fact]
@@ -267,7 +276,39 @@ namespace DragonCoderStudios.RTSTheBoardGame.Tests.Setup
         [Fact]
         public void PlacingTileFollowsRingRules()
         {
-            Assert.True(false);
+            var g = SetupWithColorsAssigned(3);
+
+            g.BeginMapSetup();
+
+            g.AssignHomeLocations();
+
+            Assert.False(
+                g.Map.PlaceTile(g.Map.Tiles.FirstOrDefault(t => t.PlacedBy == g.Players[0]), g.Players, 0, new HexCoords { X = 0, Z = 2 }),
+                "Should not be able to place in second ring until first is complete.");
+
+            var placeOrder = new HexCoords[]
+            {
+                new HexCoords { X = 0, Z = 1 }, new HexCoords { X = 1, Z = 0 }, new HexCoords { X = 1, Z = -1 },
+                new HexCoords { X = 0, Z = 1 }, new HexCoords { X = 1, Z = 0 }, new HexCoords { X = 1, Z = -1 },
+            };
+
+            for (int tile = 0; tile < 2; tile++)
+            {
+                for (int pIdx = 0; pIdx < 3; pIdx++)
+                {
+                    var placed = g.Map.Tiles.Count(t => t.Placed);
+                    var placedBy = g.Map.Tiles.Count(t => t.Placed && t.PlacedBy == g.Players[pIdx]);
+                    Assert.True(
+                        g.Map.PlaceTile(
+                            g.Map.Tiles.FirstOrDefault(t => t.PlacedBy == g.Players[pIdx] && !t.Placed),
+                            g.Players,
+                            pIdx,
+                            placeOrder[tile * 3 + pIdx]),
+                        $"Tile should be placed. Tile: {tile} Player: {pIdx}");
+                }
+            }
+
+            
         }
 
         [Fact]
@@ -288,7 +329,7 @@ namespace DragonCoderStudios.RTSTheBoardGame.Tests.Setup
             Assert.True(false);
         }
 
-        private void AssertForPlayers(List<MapTile> tiles, List<Player> players, int playerTotal, int playerBlue, int playerRed)
+        private void AssertTileCountsForPlayers(List<MapTile> tiles, List<Player> players, int playerTotal, int playerBlue, int playerRed)
         {
             for (var pIdx = 0; pIdx < players.Count(); pIdx++)
             {

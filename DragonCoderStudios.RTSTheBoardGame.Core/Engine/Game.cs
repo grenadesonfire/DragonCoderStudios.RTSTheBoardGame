@@ -105,11 +105,20 @@ namespace DragonCoderStudios.RTSTheBoardGame.Core.Engine
             HexCoords[] fourPlayerCoords =
                 new HexCoords[]
                 {
+                    new HexCoords { X = -1, Z = 3},
+                    new HexCoords { X = 3, Z = -1},
+                    new HexCoords { X = 1, Z = -3},
+                    new HexCoords { X = -3, Z = 1}
                 };
 
             HexCoords[] fivePlayerCoords =
                 new HexCoords[]
                 {
+                    new HexCoords { X = -1, Z = 3},
+                    new HexCoords { X = 3, Z = 0 },
+                    new HexCoords { X = 3, Z = -3 },
+                    new HexCoords { X = 0, Z = -3 },
+                    new HexCoords { X = -3, Z = 1}
                 };
 
             HexCoords[] sixPlayerCoords =
@@ -128,6 +137,15 @@ namespace DragonCoderStudios.RTSTheBoardGame.Core.Engine
                 case 3:
                     if (playerIndex > threePlayerCoords.Length) throw new Exception("Too many players for three player game.");
                     return threePlayerCoords[playerIndex];
+                case 4:
+                    if (playerIndex > fourPlayerCoords.Length) throw new Exception("Too many players for four player game.");
+                    return fourPlayerCoords[playerIndex];
+                case 5:
+                    if (playerIndex > fivePlayerCoords.Length) throw new Exception("Too many players for five player game.");
+                    return fivePlayerCoords[playerIndex];
+                case 6:
+                    if (playerIndex > sixPlayerCoords.Length) throw new Exception("Too many players for six player game.");
+                    return sixPlayerCoords[playerIndex];
                 default:
                     throw new Exception("Unsupported number of players.");
             }
