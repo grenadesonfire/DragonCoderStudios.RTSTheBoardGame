@@ -218,7 +218,50 @@ namespace DragonCoderStudios.RTSTheBoardGame.Tests.Setup
         [Fact]
         public void PlacingFollowsTurnOrder()
         {
-            Assert.True(false);
+            var g = SetupWithColorsAssigned(3);
+
+            g.BeginMapSetup();
+
+            g.AssignHomeLocations();
+
+            Assert.True(
+                g.Map.Tiles.Where(t => t.Category == PlanetCategory.GREEN).Count() == 4, 
+                $"Count should be 4, instead was {g.Map.Tiles.Where(t => t.Category == PlanetCategory.GREEN).Count()}");
+
+            var p2Tiles = g.Map.Tiles.Where(t => t.Owner == g.Players[1]);
+
+            Assert.True(g.Map.Tiles.Count(t => t.Placed) == 4, $"Number of tiles placed is too high. {g.Map.Tiles.Count(t => t.Placed)}");
+
+            Assert.False(
+                g.Map.PlaceTile(
+                    p2Tiles.FirstOrDefault(), 
+                    g.Players,
+                    1,
+                    new HexCoords { X = 0, Z = 1 }) 
+                && g.Map.Tiles.Count(t => t.Placed) == 4, 
+                "Tile should not be placed.");
+
+            var placeOrder = new HexCoords[]
+            {
+                new HexCoords { X = 0, Z = 1 }, new HexCoords { X = 1, Z = 0 }, new HexCoords { X = 1, Z = -1 },
+            };
+
+            for (int tile = 0; tile < 1; tile++)
+            {
+                for (int pIdx = 0; pIdx < 3; pIdx++)
+                {
+                    var placed = g.Map.Tiles.Count(t => t.Placed);
+                    var placedBy = g.Map.Tiles.Count(t => t.Placed && t.PlacedBy == g.Players[pIdx]);
+                    Assert.True(
+                        g.Map.PlaceTile(
+                            g.Map.Tiles.FirstOrDefault(t => t.PlacedBy == g.Players[pIdx] && !t.Placed),
+                            g.Players,
+                            pIdx,
+                            placeOrder[tile*3+pIdx]),
+                        $"Tile should be placed. Tile: {tile} Player: {pIdx}");
+                }
+            }
+
         }
 
         [Fact]

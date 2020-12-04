@@ -81,5 +81,56 @@ namespace DragonCoderStudios.RTSTheBoardGame.Core.Engine
         {
             Map.BeginSetup(Players);
         }
+
+        public void AssignHomeLocations()
+        {
+            for(var pIdx = 0; pIdx < Players.Count; pIdx++)
+            {
+                var homeCoords = GetHomeCoords(pIdx, Players.Count);
+
+                Map.AddHomeTile(Players[pIdx].Faction.Description.HomeTile, Players[pIdx], homeCoords);
+            }
+        }
+
+        private HexCoords GetHomeCoords(int playerIndex, int totalPlayers)
+        {
+            HexCoords[] threePlayerCoords =
+                new HexCoords[]
+                {
+                    new HexCoords { X = -3, Z = 3 },
+                    new HexCoords { X = 3, Z = 0 },
+                    new HexCoords { X = 0, Z = -3 },
+                };
+
+            HexCoords[] fourPlayerCoords =
+                new HexCoords[]
+                {
+                };
+
+            HexCoords[] fivePlayerCoords =
+                new HexCoords[]
+                {
+                };
+
+            HexCoords[] sixPlayerCoords =
+                new HexCoords[]
+                {
+                    new HexCoords { X = -3, Z = 3 },
+                    new HexCoords { X = 0, Z = 3 },
+                    new HexCoords { X = 3, Z = 0 },
+                    new HexCoords { X = 3, Z = -3 },
+                    new HexCoords { X = 0, Z = -3 },
+                    new HexCoords { X = -3, Z = 0 },
+                };
+
+            switch (totalPlayers)
+            {
+                case 3:
+                    if (playerIndex > threePlayerCoords.Length) throw new Exception("Too many players for three player game.");
+                    return threePlayerCoords[playerIndex];
+                default:
+                    throw new Exception("Unsupported number of players.");
+            }
+        }
     }
 }

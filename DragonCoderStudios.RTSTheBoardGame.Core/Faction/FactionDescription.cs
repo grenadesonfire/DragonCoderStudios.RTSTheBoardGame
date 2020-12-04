@@ -75,6 +75,7 @@ namespace DragonCoderStudios.RTSTheBoardGame.Core.Faction
                 HomeTile = new MapTile
                 {
                     Type = TileType.Planet,
+                    Category = PlanetCategory.GREEN,
                     FirstPlanet = PlanetDescription.ArchonRen(),
                     SecondPlanet = PlanetDescription.ArchonTau()
                 },

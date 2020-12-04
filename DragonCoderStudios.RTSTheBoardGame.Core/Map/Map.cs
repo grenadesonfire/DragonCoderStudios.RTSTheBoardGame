@@ -8,6 +8,9 @@ namespace DragonCoderStudios.RTSTheBoardGame.Core.Map
 {
     /// <summary>
     /// https://catlikecoding.com/unity/tutorials/hex-map/part-1/
+    /// https://www.redblobgames.com/grids/hexagons/
+    /// 
+    /// 
     /// </summary>
     public class HexCoords
     {
@@ -90,6 +93,15 @@ namespace DragonCoderStudios.RTSTheBoardGame.Core.Map
         {
             Tiles = new List<MapTile>();
 
+            Tiles.Add(
+                new MapTile
+                {
+                    Category = PlanetCategory.GREEN,
+                    Placed = true,
+                    Coordinates = new HexCoords { X = 0, Z = 0 },
+                    Type = TileType.MecatorRex,
+                });
+
             var blueCount = BlueTilesFor(players.Count());
             var redCount = RedTilesFor(players.Count());
 
@@ -138,6 +150,51 @@ namespace DragonCoderStudios.RTSTheBoardGame.Core.Map
         {
             return count == 4 ? 3 : 2;
         }
+
+        public void AddHomeTile(MapTile tile, Player p, HexCoords coords)
+        {
+            if (Tiles.Any(t => t.Coordinates != null && t.Coordinates.X == coords.X && t.Coordinates.Z == coords.Z)) throw new Exception("Tile already located here.");
+
+            tile.Coordinates = coords;
+            tile.Placed = true;
+            Tiles.Add(tile);
+            tile.PlacedBy = p;
+        }
+
+        public bool PlaceTile(MapTile tile, List<Player> players, int pIdx, HexCoords coords)
+        {
+            if (tile == null) return false;
+            var prevPlayer = players[(pIdx + players.Count() - 1) % players.Count()];
+
+            // Check the previous player has placed enough.
+            //if (Tiles.Count(t => t.PlacedBy == prevPlayer) != Tiles.Count(t => players[pIdx] == t.PlacedBy)) return false;
+            var prev = PlacedByPlayer(prevPlayer);
+            var now = PlacedByPlayer(players[pIdx]);
+            if (pIdx == 0 && PlacedByPlayer(prevPlayer) != PlacedByPlayer(players[pIdx])) return false;
+            else if (pIdx != 0 && prev <= now) return false;
+
+            var placed = Tiles.Count(t => t.Placed);
+            var distance = (Math.Abs(coords.X) + Math.Abs(coords.Y) + Math.Abs(coords.Z)) / 2;
+
+            //Center is always mecator rex.
+            if (distance == 0) return false;
+            //Check if first ring complete
+            if (placed <= players.Count + 1 + 6 && distance > 1) return false;
+            //Check if second ring complete
+            if (placed <= players.Count + 1 + 6 + 12 && distance > 2) return false;
+            //Check three player
+            //Now reject anything greater than 3 distance.
+            if (distance > 3) return false;
+
+            if (Tiles.Any(t => t.Coordinates != null && t.Coordinates.X == coords.X && t.Coordinates.Z == coords.Z)) return false;
+
+            tile.Placed = true;
+            tile.Coordinates = coords;
+
+            return true;
+        }
+
+        private int PlacedByPlayer(Player p) => Tiles.Count(t => t.Placed && t.PlacedBy == p);
     }
 
     public class MapFactory
