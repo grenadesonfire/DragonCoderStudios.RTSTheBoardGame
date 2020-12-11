@@ -85,6 +85,12 @@ namespace DragonCoderStudios.RTSTheBoardGame.Core.Map
         public bool Placed { get; set; }
     }
 
+    public struct TilePlacementChoice
+    {
+        public List<HexCoords> PlaceableLocations { get; set; }
+        public MapTile MyProperty { get; set; }
+    }
+
     public class MapLayout
     {
         public List<MapTile> Tiles { get; private set; }
@@ -174,7 +180,7 @@ namespace DragonCoderStudios.RTSTheBoardGame.Core.Map
             else if (pIdx != 0 && prev <= now) return false;
 
             var placed = Tiles.Count(t => t.Placed);
-            var distance = (Math.Abs(coords.X) + Math.Abs(coords.Y) + Math.Abs(coords.Z)) / 2;
+            var distance = DistanceFromCenter(coords);
 
             //Center is always mecator rex.
             if (distance == 0) return false;
@@ -192,6 +198,33 @@ namespace DragonCoderStudios.RTSTheBoardGame.Core.Map
             tile.Coordinates = coords;
 
             return true;
+        }
+
+        public MapTile NextAvailableTile(List<Player> players, int playerIdx)
+        {
+            return Tiles.FirstOrDefault(t => !t.Placed && t.PlacedBy == players[playerIdx]);
+        }
+
+        public List<HexCoords> AvailableSpots(MapTile tile)
+        {
+            var ret = new List<HexCoords>();
+
+            for(int z = -3; z <= 3; z++)
+            {
+                for(int x = -3; x <= 3; x++)
+                {
+                    if (x == 0 && z == 0) continue;
+
+                    ret.Add(new HexCoords { X = x, Z = z });
+                }
+            }
+
+            return ret;
+        }
+
+        private int DistanceFromCenter(HexCoords coords)
+        {
+            return (Math.Abs(coords.X) + Math.Abs(coords.Y) + Math.Abs(coords.Z)) / 2;
         }
 
         private int PlacedByPlayer(Player p) => Tiles.Count(t => t.Placed && t.PlacedBy == p);

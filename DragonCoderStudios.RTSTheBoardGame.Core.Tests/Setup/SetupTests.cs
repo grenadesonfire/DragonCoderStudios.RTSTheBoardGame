@@ -286,25 +286,22 @@ namespace DragonCoderStudios.RTSTheBoardGame.Tests.Setup
                 g.Map.PlaceTile(g.Map.Tiles.FirstOrDefault(t => t.PlacedBy == g.Players[0]), g.Players, 0, new HexCoords { X = 0, Z = 2 }),
                 "Should not be able to place in second ring until first is complete.");
 
-            var placeOrder = new HexCoords[]
-            {
-                new HexCoords { X = 0, Z = 1 }, new HexCoords { X = 1, Z = 0 }, new HexCoords { X = 1, Z = -1 },
-                new HexCoords { X = 0, Z = 1 }, new HexCoords { X = 1, Z = 0 }, new HexCoords { X = 1, Z = -1 },
-            };
-
-            for (int tile = 0; tile < 2; tile++)
+            for (int tile = 0; tile < 8; tile++)
             {
                 for (int pIdx = 0; pIdx < 3; pIdx++)
                 {
                     var placed = g.Map.Tiles.Count(t => t.Placed);
                     var placedBy = g.Map.Tiles.Count(t => t.Placed && t.PlacedBy == g.Players[pIdx]);
+
+                    var nextTile = g.Map.NextAvailableTile(g.Players, pIdx);
+
                     Assert.True(
                         g.Map.PlaceTile(
-                            g.Map.Tiles.FirstOrDefault(t => t.PlacedBy == g.Players[pIdx] && !t.Placed),
+                            nextTile,
                             g.Players,
                             pIdx,
-                            placeOrder[tile * 3 + pIdx]),
-                        $"Tile should be placed. Tile: {tile} Player: {pIdx}");
+                            g.Map.AvailableSpots(nextTile).FirstOrDefault()),
+                        $"Tile should be placed. Tile: {tile} Player: {pIdx}"); ;
                 }
             }
 
