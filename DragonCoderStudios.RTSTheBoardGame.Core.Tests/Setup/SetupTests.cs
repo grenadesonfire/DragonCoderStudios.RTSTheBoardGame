@@ -60,6 +60,38 @@ namespace DragonCoderStudios.RTSTheBoardGame.Tests.Setup
 
             return g;
         }
+
+        public Game SetupWithSpacesBuilt(int players)
+        {
+            var g = SetupWithColorsAssigned(players);
+
+            g.BeginMapSetup();
+
+            g.AssignHomeLocations();
+
+            for (int tile = 0; tile < 8; tile++)
+            {
+                for (int pIdx = 0; pIdx < 3; pIdx++)
+                {
+                    var placed = g.Map.Tiles.Count(t => t.Placed);
+                    var placedBy = g.Map.Tiles.Count(t => t.Placed && t.PlacedBy == g.Players[pIdx]);
+
+                    var nextTile = g.Map.NextAvailableTile(g.Players, pIdx);
+                    var spots = g.Map.AvailableSpots(nextTile).OrderBy(coords => g.Map.DistanceFromCenter(coords));
+                    var spot = spots.FirstOrDefault();
+
+                    Assert.True(
+                        g.Map.PlaceTile(
+                            nextTile,
+                            g.Players,
+                            pIdx,
+                            spot),
+                        $"Tile should be placed. Tile: {tile} Player: {pIdx} Attempted: [{spot?.X},{spot?.Y},{spot?.Z}]");
+                }
+            }
+
+            return g;
+        }
     }
 
     public class Stage01 : BaseSetupTests
@@ -291,22 +323,21 @@ namespace DragonCoderStudios.RTSTheBoardGame.Tests.Setup
                 for (int pIdx = 0; pIdx < 3; pIdx++)
                 {
                     var placed = g.Map.Tiles.Count(t => t.Placed);
-                    var placedBy = g.Map.Tiles.Count(t => t.Placed && t.PlacedBy == g.Players[pIdx]);
+                     var placedBy = g.Map.Tiles.Count(t => t.Placed && t.PlacedBy == g.Players[pIdx]);
 
                     var nextTile = g.Map.NextAvailableTile(g.Players, pIdx);
+                    var spots = g.Map.AvailableSpots(nextTile).OrderBy(coords => g.Map.DistanceFromCenter(coords));
+                    var spot = spots.FirstOrDefault();
 
                     Assert.True(
                         g.Map.PlaceTile(
                             nextTile,
                             g.Players,
                             pIdx,
-                            g.Map.AvailableSpots(nextTile).FirstOrDefault()),
-                        $"Tile should be placed. Tile: {tile} Player: {pIdx}"); ;
+                            spot),
+                        $"Tile should be placed. Tile: {tile} Player: {pIdx} Attempted: [{spot?.X},{spot?.Y},{spot?.Z}]");
                 }
-            }
-
-            
-        }
+            }        }
 
         [Fact]
         public void AnnommalyTilesCantTouch()
@@ -317,7 +348,39 @@ namespace DragonCoderStudios.RTSTheBoardGame.Tests.Setup
         [Fact]
         public void AnomalyTilesTouchIfLastTwoSpots()
         {
-            Assert.True(false);
+            var g = SetupWithColorsAssigned(3);
+
+            g.BeginMapSetup();
+
+            g.AssignHomeLocations();
+
+            for (int tile = 0; tile < 8; tile++)
+            {
+                for (int pIdx = 0; pIdx < 3; pIdx++)
+                {
+                    var placed = g.Map.Tiles.Count(t => t.Placed);
+                    if (placed == g.Map.Tiles.Count() - 2) continue;
+
+                    var placedBy = g.Map.Tiles.Count(t => t.Placed && t.PlacedBy == g.Players[pIdx]);
+
+                    var nextTile = g.Map.NextAvailableTile(g.Players, pIdx, new TileType[] { TileType.AsteroidField, TileType.GravityRift, TileType.Nebula, TileType.Supernova });
+                    var spots = g.Map.AvailableSpots(nextTile).OrderBy(coords => g.Map.DistanceFromCenter(coords));
+                    var spot = spots.FirstOrDefault();
+
+                    Assert.True(
+                        g.Map.PlaceTile(
+                            nextTile,
+                            g.Players,
+                            pIdx,
+                            spot),
+                        $"Tile should be placed. Tile: {tile} Player: {pIdx} Attempted: [{spot?.X},{spot?.Y},{spot?.Z}]");
+                }
+            }
+
+            var nextTileFail = g.Map.NextAvailableTile(g.Players, 1);
+            var spotFail = g.Map.AvailableSpots(nextTileFail).FirstOrDefault();
+
+            Assert.False(g.Map.PlaceTile(nextTileFail, g.Players, 1, spotFail), "Shouldn't be able to put down tile.");
         }
 
         [Fact]

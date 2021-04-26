@@ -17,6 +17,15 @@ namespace DragonCoderStudios.RTSTheBoardGame.Core.Map
         public int X { get; set; }
         public int Z { get; set; }
         public int Y { get => -X - Z; }
+
+        public override bool Equals(object obj)
+        {
+            if (!(obj is HexCoords)) return false;
+
+            var c = obj as HexCoords;
+
+            return c.X == X && c.Y == Y && c.Z == Z;
+        }
     }
 
     public enum TileType
@@ -94,6 +103,7 @@ namespace DragonCoderStudios.RTSTheBoardGame.Core.Map
     public class MapLayout
     {
         public List<MapTile> Tiles { get; private set; }
+        public int[] RingLimits { get; private set; }
 
         public void BeginSetup(List<Player> players)
         {
@@ -116,6 +126,9 @@ namespace DragonCoderStudios.RTSTheBoardGame.Core.Map
                 GenerateBlueTiles(blueCount, p);
                 GenerateRedTiles(redCount, p);
             }
+
+            if (players.Count == 3) RingLimits = new int[] { 1, 7, 19, 26 };
+            else RingLimits = new int[] { 1, 7, 19, 37 };
         }
 
         private void GenerateBlueTiles(int count, Player p)
@@ -176,8 +189,8 @@ namespace DragonCoderStudios.RTSTheBoardGame.Core.Map
             //if (Tiles.Count(t => t.PlacedBy == prevPlayer) != Tiles.Count(t => players[pIdx] == t.PlacedBy)) return false;
             var prev = PlacedByPlayer(prevPlayer);
             var now = PlacedByPlayer(players[pIdx]);
-            if (pIdx == 0 && PlacedByPlayer(prevPlayer) != PlacedByPlayer(players[pIdx])) return false;
-            else if (pIdx != 0 && prev <= now) return false;
+            if (pIdx == 0 && PlacedByPlayer(prevPlayer) != PlacedByPlayer(players[pIdx])) { return false; }
+            else if (pIdx != 0 && prev <= now) { return false; }
 
             var placed = Tiles.Count(t => t.Placed);
             var distance = DistanceFromCenter(coords);
@@ -185,9 +198,9 @@ namespace DragonCoderStudios.RTSTheBoardGame.Core.Map
             //Center is always mecator rex.
             if (distance == 0) return false;
             //Check if first ring complete
-            if (placed <= players.Count + 1 + 6 && distance > 1) return false;
+            if (placed < players.Count + 1 + 6 && distance > 1) { return false; }
             //Check if second ring complete
-            if (placed <= players.Count + 1 + 6 + 12 && distance > 2) return false;
+            if (placed < players.Count + 1 + 6 + 12 && distance > 2) return false;
             //Check three player
             //Now reject anything greater than 3 distance.
             if (distance > 3) return false;
@@ -205,6 +218,13 @@ namespace DragonCoderStudios.RTSTheBoardGame.Core.Map
             return Tiles.FirstOrDefault(t => !t.Placed && t.PlacedBy == players[playerIdx]);
         }
 
+        public MapTile NextAvailableTile(List<Player> players, int playerIdx, TileType[] avoid)
+        {
+            var tile = Tiles.FirstOrDefault(t => !t.Placed && t.PlacedBy == players[playerIdx] && !avoid.Any(a => a == t.Type));
+
+            return (tile == null ? NextAvailableTile(players, playerIdx) : tile);
+        }
+
         public List<HexCoords> AvailableSpots(MapTile tile)
         {
             var ret = new List<HexCoords>();
@@ -214,20 +234,28 @@ namespace DragonCoderStudios.RTSTheBoardGame.Core.Map
                 for(int x = -3; x <= 3; x++)
                 {
                     if (x == 0 && z == 0) continue;
+                    if (GetTileAt(new HexCoords { X = x, Z = z }) != null) continue;
 
                     ret.Add(new HexCoords { X = x, Z = z });
                 }
             }
 
+            var placed = Tiles.Count(t => t.Placed);
+
             return ret;
         }
 
-        private int DistanceFromCenter(HexCoords coords)
+        public int DistanceFromCenter(HexCoords coords)
         {
             return (Math.Abs(coords.X) + Math.Abs(coords.Y) + Math.Abs(coords.Z)) / 2;
         }
 
         private int PlacedByPlayer(Player p) => Tiles.Count(t => t.Placed && t.PlacedBy == p);
+
+        public MapTile GetTileAt(HexCoords spot)
+        {
+            return Tiles.FirstOrDefault(t => t.Coordinates != null && t.Coordinates.Equals(spot));
+        }
     }
 
     public class MapFactory
